@@ -4,14 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//  Conexion a base de datos en memoria
-// builder.Services.AddDbContext<TareasContext>(p => p.UseInMemoryDatabase("TareasDB"));
-
-// Conexion a SQL Server
-//builder.Services.AddSqlServer<TareasContext>("Data Source=localhost;Initial Catalog=TareasDB; user id=sa; password=123; Integrated Security=True;");
-
 // Conexion a Postgres
-builder.Services.AddNpgsql<TareasContext>("Server=localhost;Port=5432;Database=TareasDB;User Id=postgres;Password=homero420;");
+builder.Services.AddNpgsql<TareasContext>(builder.Configuration.GetConnectionString("PostgresConnection"));
 
 var app = builder.Build();
 
