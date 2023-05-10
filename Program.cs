@@ -4,16 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<TareasContext>(p => p.UseInMemoryDatabase("TareasDB"));
+//  Conexion a base de datos en memoria
+// builder.Services.AddDbContext<TareasContext>(p => p.UseInMemoryDatabase("TareasDB"));
+
+// Conexion a SQL Server
+builder.Services.AddSqlServer<TareasContext>("Data Source=localhost;Initial Catalog=TareasDB; user id=sa; password=123; Integrated Security=True;");
+
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
+// Verificar que la base de datos se haya creado
 app.MapGet("/dbconection", async ([FromServices] TareasContext db) => 
 {
-    //await db.Database.EnsureCreatedAsync();
-    db.Database.EnsureCreated();
+    await db.Database.EnsureCreatedAsync();
     return Results.Ok( "Base de datos creada" + db.Database.IsInMemory() );
 });
 
