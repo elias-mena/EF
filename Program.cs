@@ -8,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // builder.Services.AddDbContext<TareasContext>(p => p.UseInMemoryDatabase("TareasDB"));
 
 // Conexion a SQL Server
-builder.Services.AddSqlServer<TareasContext>("Data Source=localhost;Initial Catalog=TareasDB; user id=sa; password=123; Integrated Security=True;");
+//builder.Services.AddSqlServer<TareasContext>("Data Source=localhost;Initial Catalog=TareasDB; user id=sa; password=123; Integrated Security=True;");
 
+// Conexion a Postgres
+builder.Services.AddNpgsql<TareasContext>("Server=localhost;Port=5432;Database=TareasDB;User Id=postgres;Password=homero420;");
 
 var app = builder.Build();
 
@@ -17,7 +19,7 @@ var app = builder.Build();
 app.MapGet("/dbconection", async ([FromServices] TareasContext db) => 
 {
     await db.Database.EnsureCreatedAsync();
-    return Results.Ok( "Base de datos creada" + db.Database.IsInMemory() );
+    return Results.Ok( "Base de datos creada");
 });
 
 
