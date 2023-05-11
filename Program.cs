@@ -17,8 +17,9 @@ app.MapGet("/dbconection", async ([FromServices] TareasContext db) =>
 });
 
 
-app.MapGet("/categorias", async (TareasContext db) => await db.Categorias.ToListAsync());
-
-//app.MapGet("/tareas", async (TareasContext db) => await db.Tareas.ToListAsync());
+app.MapGet("/api/tareas", ([FromServices] TareasContext dbContext) =>
+{
+    return Results.Ok(dbContext.Tareas.Include(p => p.Categoria).Where(p => p.PrioridadTarea == EF.Models.Prioridad.Baja));
+});
 
 app.Run();
