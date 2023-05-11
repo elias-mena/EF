@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using EF;
 using Microsoft.AspNetCore.Mvc;
+using EF.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,3 +24,15 @@ app.MapGet("/api/tareas", ([FromServices] TareasContext dbContext) =>
 });
 
 app.Run();
+
+app.MapPost("/api/tareas", async ([FromServices] TareasContext dbContext, [FromBody] Tarea tarea)=>
+{
+    tarea.TareaId = Guid.NewGuid();
+    tarea.FechaCreacion = DateTime.Now;
+    await dbContext.AddAsync(tarea);
+    //await dbContext.Tareas.AddAsync(tarea);
+
+    await dbContext.SaveChangesAsync();
+
+    return Results.Ok();
+});
